@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 export interface Tab{
@@ -15,10 +15,13 @@ export interface Tab{
 export class TabsComponent implements OnInit {
   tabs: Tab[];
   selectedIndex = 0;
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer, private ref: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.tabs = [ { Title: 'Dashboard', Url: this.sanitizer.bypassSecurityTrustResourceUrl('/dashboard'), Select: true}];
+  }
+  ngAfterContentChecked() {
+    this.ref.detectChanges();
   }
   closeTab(event): void{
     this.tabs[0].Select = true;
